@@ -8,7 +8,7 @@ extras_require = {"testing": ["nose", "coveralls"]}
 
 setuptools.setup(
     name="mutwo.ext-reaper",
-    version="0.1.0",
+    version="0.1.1",
     license="GPL",
     description="Reaper extension for event based framework for generative art",
     long_description=long_description,
@@ -22,7 +22,7 @@ setuptools.setup(
     ],
     setup_requires=[],
     install_requires=[
-        "mutwo>=0.43.0, <1.0.0",
+        "mutwo>=0.49.0, <1.0.0",
     ],
     extras_require=extras_require,
     python_requires=">=3.9, <4",

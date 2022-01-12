@@ -5,7 +5,7 @@ import typing
 
 from mutwo.core import converters
 from mutwo.core import events
-from mutwo.core import parameters
+from mutwo.core.utilities import constants
 
 __all__ = ("ReaperMarkerConverter",)
 
@@ -60,7 +60,7 @@ class ReaperMarkerConverter(converters.abc.EventConverter):
     def _convert_simple_event(
         self,
         simple_event: events.basic.SimpleEvent,
-        absolute_entry_delay: parameters.abc.DurationType,
+        absolute_entry_delay: constants.DurationType,
     ) -> tuple[str, ...]:
         try:
             marker_name = self._simple_event_to_marker_name(simple_event)
