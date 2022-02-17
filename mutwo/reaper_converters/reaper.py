@@ -3,40 +3,40 @@
 import typing
 
 
-from mutwo.core import converters
-from mutwo.core import events
-from mutwo.core.utilities import constants
+from mutwo import core_converters
+from mutwo import core_events
+from mutwo import core_constants
 
 __all__ = ("ReaperMarkerConverter",)
 
 
-class ReaperMarkerConverter(converters.abc.EventConverter):
+class ReaperMarkerConverter(core_converters.abc.EventConverter):
     """Make Reaper Marker entries.
 
     :param simple_event_to_marker_name: A function which converts a
-        :class:`~mutwo.events.basic.SimpleEvent` to the marker
+        :class:`~mutwo.core_events.SimpleEvent` to the marker
         name. By default the function will ask the event for its
         `name` property. If the event doesn't know the `name`
         property (and the function call will result in an ``AttributeError``)
         mutwo will ignore the current event.
-    :type simple_event_to_marker_name: typing.Callable[[events.basic.SimpleEvent], str]
+    :type simple_event_to_marker_name: typing.Callable[[core_events.SimpleEvent], str]
     :param simple_event_to_marker_color: A function which converts a
-        :class:`~mutwo.events.basic.SimpleEvent` to the marker
+        :class:`~mutwo.core_events.SimpleEvent` to the marker
         color. By default the function will ask the event for its
         `color` property. If the event doesn't know the `color`
         property (and the function call will result in an ``AttributeError``)
         mutwo will ignore the current event.
-    :type simple_event_to_marker_color: typing.Callable[[events.basic.SimpleEvent], str]
+    :type simple_event_to_marker_color: typing.Callable[[core_events.SimpleEvent], str]
 
     The resulting string can be copied into the respective reaper
     project file one line before the '<PROJBAY' tag.
 
     **Example:**
 
-    >>> from mutwo.ext.converters.frontends import reaper
-    >>> from mutwo.events import basic
-    >>> marker_converter = reaper.ReaperMarkerConverter()
-    >>> events = basic.SequentialEvent([basic.SimpleEvent(2), basic.SimpleEvent(3)])
+    >>> from mutwo import reaper_converters
+    >>> from mutwo import core_events
+    >>> marker_converter = reaper_converters.ReaperMarkerConverter()
+    >>> events = core_events.SequentialEvent([core_events.SimpleEvent(2), core_events.SimpleEvent(3)])
     >>> events[0].name = 'beginning'
     >>> events[0].color = r'0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}'
     >>> events[1].name = 'center'
@@ -48,10 +48,10 @@ class ReaperMarkerConverter(converters.abc.EventConverter):
     def __init__(
         self,
         simple_event_to_marker_name: typing.Callable[
-            [events.basic.SimpleEvent], str
+            [core_events.SimpleEvent], str
         ] = lambda simple_event: simple_event.name,  # type: ignore
         simple_event_to_marker_color: typing.Callable[
-            [events.basic.SimpleEvent], str
+            [core_events.SimpleEvent], str
         ] = lambda simple_event: simple_event.color,  # type: ignore
     ):
         self._simple_event_to_marker_name = simple_event_to_marker_name
@@ -59,8 +59,8 @@ class ReaperMarkerConverter(converters.abc.EventConverter):
 
     def _convert_simple_event(
         self,
-        simple_event: events.basic.SimpleEvent,
-        absolute_entry_delay: constants.DurationType,
+        simple_event: core_events.SimpleEvent,
+        absolute_entry_delay: core_constants.DurationType,
     ) -> tuple[str, ...]:
         try:
             marker_name = self._simple_event_to_marker_name(simple_event)
@@ -70,7 +70,7 @@ class ReaperMarkerConverter(converters.abc.EventConverter):
 
         return ("{} {} {}".format(absolute_entry_delay, marker_name, marker_color),)
 
-    def convert(self, event_to_convert: events.abc.Event) -> str:
+    def convert(self, event_to_convert: core_events.abc.Event) -> str:
         """Convert event to reaper markers (as plain string).
 
         :param event_to_convert: The event which shall be

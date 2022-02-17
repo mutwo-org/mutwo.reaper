@@ -1,15 +1,14 @@
 import unittest
 
-from mutwo.core.events import basic
-
-from mutwo.ext.converters.frontends import reaper
+from mutwo import core_events
+from mutwo import reaper_converters
 
 
 class ReaperMarkerConverterTest(unittest.TestCase):
     def test_convert_simple_event(self):
-        converter = reaper.ReaperMarkerConverter()
+        converter = reaper_converters.ReaperMarkerConverter()
 
-        event = basic.SimpleEvent(2)
+        event = core_events.SimpleEvent(2)
         event.name = "testMarker"
         event.color = r"0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}"
 
@@ -21,7 +20,7 @@ class ReaperMarkerConverterTest(unittest.TestCase):
         )
 
         # with different init arguments
-        converter = reaper.ReaperMarkerConverter(
+        converter = reaper_converters.ReaperMarkerConverter(
             simple_event_to_marker_name=lambda simple_event: simple_event.marker_name,
             simple_event_to_marker_color=lambda simple_event: simple_event.marker_color,
         )
@@ -35,9 +34,11 @@ class ReaperMarkerConverterTest(unittest.TestCase):
         )
 
     def test_convert(self):
-        converter = reaper.ReaperMarkerConverter()
+        converter = reaper_converters.ReaperMarkerConverter()
 
-        events = basic.SequentialEvent([basic.SimpleEvent(2), basic.SimpleEvent(3)])
+        events = core_events.SequentialEvent(
+            [core_events.SimpleEvent(2), core_events.SimpleEvent(3)]
+        )
 
         events[0].name = "beginning"
         events[0].color = r"0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}"
