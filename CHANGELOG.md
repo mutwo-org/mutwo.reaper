@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2022-08-12
+
+### Changed
+- Package name from `mutwo.ext-reaper` to `mutwo.reaper`
+
+
 ## [0.2.0] - 2022-02-17
 
 ### Changed
