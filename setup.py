@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 extras_require = {"testing": ["nose", "coveralls"]}
 
 setuptools.setup(
-    name="mutwo.ext-reaper",
+    name="mutwo.reaper",
     version="0.2.0",
     license="GPL",
     description="Reaper extension for event based framework for generative art",
@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     author="Levin Eric Zimmermann",
     author_email="levin.eric.zimmermann@posteo.eu",
-    url="https://github.com/mutwo-org/mutwo.ext-reaper",
+    url="https://github.com/mutwo-org/mutwo.reaper",
     project_urls={"Documentation": "https://mutwo.readthedocs.io/en/latest/"},
     packages=[
         package
