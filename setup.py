@@ -1,5 +1,11 @@
 import setuptools  # type: ignore
 
+version = {}
+with open("mutwo/reaper_version/__init__.py") as fp:
+    exec(fp.read(), version)
+
+VERSION = version["__version__"]
+
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
