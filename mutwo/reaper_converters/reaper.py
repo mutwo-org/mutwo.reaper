@@ -5,7 +5,7 @@ import typing
 
 from mutwo import core_converters
 from mutwo import core_events
-from mutwo import core_constants
+from mutwo import core_parameters
 
 __all__ = ("ReaperMarkerConverter",)
 
@@ -60,7 +60,7 @@ class ReaperMarkerConverter(core_converters.abc.EventConverter):
     def _convert_simple_event(
         self,
         simple_event: core_events.SimpleEvent,
-        absolute_entry_delay: core_constants.DurationType,
+        absolute_entry_delay: core_parameters.abc.Duration,
     ) -> tuple[str, ...]:
         try:
             marker_name = self._simple_event_to_marker_name(simple_event)
@@ -68,7 +68,11 @@ class ReaperMarkerConverter(core_converters.abc.EventConverter):
         except AttributeError:
             return tuple([])
 
-        return ("{} {} {}".format(absolute_entry_delay, marker_name, marker_color),)
+        return (
+            "{} {} {}".format(
+                absolute_entry_delay.duration_in_floats, marker_name, marker_color
+            ),
+        )
 
     def convert(self, event_to_convert: core_events.abc.Event) -> str:
         """Convert event to reaper markers (as plain string).
@@ -84,9 +88,9 @@ class ReaperMarkerConverter(core_converters.abc.EventConverter):
         """
 
         reaper_marker_tuple = tuple(
-            "MARKER {} {}".format(nth_marker, marker_data)
-            for nth_marker, marker_data in enumerate(
-                self._convert_event(event_to_convert, 0)
+            "MARKER {} {}".format(marker_index, marker_data)
+            for marker_index, marker_data in enumerate(
+                self._convert_event(event_to_convert, core_parameters.DirectDuration(0))
             )
         )
         return "\n".join(reaper_marker_tuple)

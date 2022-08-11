@@ -1,6 +1,7 @@
 import unittest
 
 from mutwo import core_events
+from mutwo import core_parameters
 from mutwo import reaper_converters
 
 
@@ -12,11 +13,11 @@ class ReaperMarkerConverterTest(unittest.TestCase):
         event.name = "testMarker"
         event.color = r"0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}"
 
-        absolute_entry_delay = 10
+        absolute_entry_delay = core_parameters.DirectDuration(10)
 
         self.assertEqual(
             converter._convert_simple_event(event, absolute_entry_delay),
-            (f"10 {event.name} {event.color}",),
+            (f"10.0 {event.name} {event.color}",),
         )
 
         # with different init arguments
@@ -30,7 +31,7 @@ class ReaperMarkerConverterTest(unittest.TestCase):
 
         self.assertEqual(
             converter._convert_simple_event(event, absolute_entry_delay),
-            (f"10 {event.name} {event.color}",),
+            (f"10.0 {event.name} {event.color}",),
         )
 
     def test_convert(self):
@@ -47,7 +48,7 @@ class ReaperMarkerConverterTest(unittest.TestCase):
 
         self.assertEqual(
             converter.convert(events),
-            f"MARKER 0 0 {events[0].name} {events[0].color}\nMARKER 1 2 {events[1].name} {events[1].color}",
+            f"MARKER 0 0.0 {events[0].name} {events[0].color}\nMARKER 1 2.0 {events[1].name} {events[1].color}",
         )
 
 
