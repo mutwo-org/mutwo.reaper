@@ -1,3 +1,5 @@
+"""Convert `mutwo` data to data readable by the `Reaper DAW <reaper.fm/>`_."""
+
 from . import configurations
 
 from .reaper import *

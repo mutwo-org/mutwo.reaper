@@ -1,5 +1,3 @@
-"""Convert mutwo data to data readable by the `Reaper DAW <reaper.fm/>`_."""
-
 import typing
 
 
