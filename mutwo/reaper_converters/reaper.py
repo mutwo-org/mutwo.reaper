@@ -7,10 +7,10 @@ from mutwo import core_converters
 from mutwo import core_events
 from mutwo import core_parameters
 
-__all__ = ("ReaperMarkerConverter",)
+__all__ = ("EventToReaperMakerString",)
 
 
-class ReaperMarkerConverter(core_converters.abc.EventConverter):
+class EventToReaperMakerString(core_converters.abc.EventConverter):
     """Make Reaper Marker entries.
 
     :param simple_event_to_marker_name: A function which converts a
@@ -35,7 +35,7 @@ class ReaperMarkerConverter(core_converters.abc.EventConverter):
 
     >>> from mutwo import reaper_converters
     >>> from mutwo import core_events
-    >>> marker_converter = reaper_converters.ReaperMarkerConverter()
+    >>> marker_converter = reaper_converters.EventToReaperMarkerString()
     >>> events = core_events.SequentialEvent([core_events.SimpleEvent(2), core_events.SimpleEvent(3)])
     >>> events[0].name = 'beginning'
     >>> events[0].color = r'0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}'

@@ -5,9 +5,9 @@ from mutwo import core_parameters
 from mutwo import reaper_converters
 
 
-class ReaperMarkerConverterTest(unittest.TestCase):
+class EventToReaperMarkerStringTest(unittest.TestCase):
     def test_convert_simple_event(self):
-        converter = reaper_converters.ReaperMarkerConverter()
+        converter = reaper_converters.EventToReaperMarkerString()
 
         event = core_events.SimpleEvent(2)
         event.name = "testMarker"
@@ -21,7 +21,7 @@ class ReaperMarkerConverterTest(unittest.TestCase):
         )
 
         # with different init arguments
-        converter = reaper_converters.ReaperMarkerConverter(
+        converter = reaper_converters.EventToReaperMarkerString(
             simple_event_to_marker_name=lambda simple_event: simple_event.marker_name,
             simple_event_to_marker_color=lambda simple_event: simple_event.marker_color,
         )
@@ -35,7 +35,7 @@ class ReaperMarkerConverterTest(unittest.TestCase):
         )
 
     def test_convert(self):
-        converter = reaper_converters.ReaperMarkerConverter()
+        converter = reaper_converters.EventToReaperMarkerString()
 
         events = core_events.SequentialEvent(
             [core_events.SimpleEvent(2), core_events.SimpleEvent(3)]
