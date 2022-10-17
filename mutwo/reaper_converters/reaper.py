@@ -6,8 +6,55 @@ import typing
 from mutwo import core_converters
 from mutwo import core_events
 from mutwo import core_parameters
+from mutwo import reaper_converters
 
-__all__ = ("EventToReaperMakerString",)
+__all__ = (
+    "EventToReaperMakerString",
+    "SimpleEventToMarkerName",
+    "SimpleEventToMarkerColor",
+)
+
+
+class SimpleEventToMarkerName(core_converters.SimpleEventToAttribute):
+    """Convert :class:`~mutwo.core_events.SimpleEvent` to a name of a marker.
+
+    By default `mutwo` will fetch from an event the
+    :const:`~mutwo.reaper_converters.configurations.DEFAULT_MARKER_NAME_ATTRIBUTE_NAME`.
+    If no attribute with `attribute_name` can be found the converter will simply return
+    ``None``.
+    """
+
+    def __init__(
+        self,
+        attribute_name: typing.Optional[str] = None,
+        exception_value=None,
+    ):
+        if attribute_name is None:
+            attribute_name = (
+                reaper_converters.configurations.DEFAULT_MARKER_NAME_ATTRIBUTE_NAME
+            )
+        super().__init__(attribute_name, exception_value)
+
+
+class SimpleEventToMarkerColor(core_converters.SimpleEventToAttribute):
+    """Convert :class:`~mutwo.core_events.SimpleEvent` to the color of a marker.
+
+    By default `mutwo` will fetch from an event the
+    :const:`~mutwo.reaper_converters.configurations.DEFAULT_MARKER_COLOR_ATTRIBUTE_NAME`.
+    If no attribute with `attribute_name` can be found the converter will simply return
+    ``None``.
+    """
+
+    def __init__(
+        self,
+        attribute_name: typing.Optional[str] = None,
+        exception_value=None,
+    ):
+        if attribute_name is None:
+            attribute_name = (
+                reaper_converters.configurations.DEFAULT_MARKER_COLOR_ATTRIBUTE_NAME
+            )
+        super().__init__(attribute_name, exception_value)
 
 
 class EventToReaperMakerString(core_converters.abc.EventConverter):
@@ -15,17 +62,15 @@ class EventToReaperMakerString(core_converters.abc.EventConverter):
 
     :param simple_event_to_marker_name: A function which converts a
         :class:`~mutwo.core_events.SimpleEvent` to the marker
-        name. By default the function will ask the event for its
-        `name` property. If the event doesn't know the `name`
-        property (and the function call will result in an ``AttributeError``)
-        mutwo will ignore the current event.
+        name. If the function returns ``None`` `mutwo` will ignore`
+        the current event. By default `simple_event_to_marker_name` is set
+        to :class:`SimpleEventToMarkerName`.
     :type simple_event_to_marker_name: typing.Callable[[core_events.SimpleEvent], str]
     :param simple_event_to_marker_color: A function which converts a
         :class:`~mutwo.core_events.SimpleEvent` to the marker
-        color. By default the function will ask the event for its
-        `color` property. If the event doesn't know the `color`
-        property (and the function call will result in an ``AttributeError``)
-        mutwo will ignore the current event.
+        color. If the function returns ``None`` `mutwo` will ignore`
+        the current event. By default `simple_event_to_marker_name` is set
+        to :class:`SimpleEventToMarkerColor`.
     :type simple_event_to_marker_color: typing.Callable[[core_events.SimpleEvent], str]
 
     The resulting string can be copied into the respective reaper
@@ -49,10 +94,10 @@ class EventToReaperMakerString(core_converters.abc.EventConverter):
         self,
         simple_event_to_marker_name: typing.Callable[
             [core_events.SimpleEvent], str
-        ] = lambda simple_event: simple_event.name,  # type: ignore
+        ] = SimpleEventToMarkerName(),  # type: ignore
         simple_event_to_marker_color: typing.Callable[
             [core_events.SimpleEvent], str
-        ] = lambda simple_event: simple_event.color,  # type: ignore
+        ] = SimpleEventToMarkerColor(),  # type: ignore
     ):
         self._simple_event_to_marker_name = simple_event_to_marker_name
         self._simple_event_to_marker_color = simple_event_to_marker_color
@@ -62,10 +107,12 @@ class EventToReaperMakerString(core_converters.abc.EventConverter):
         simple_event: core_events.SimpleEvent,
         absolute_entry_delay: core_parameters.abc.Duration,
     ) -> tuple[str, ...]:
-        try:
-            marker_name = self._simple_event_to_marker_name(simple_event)
-            marker_color = self._simple_event_to_marker_color(simple_event)
-        except AttributeError:
+        marker_name = self._simple_event_to_marker_name(simple_event)
+        marker_color = self._simple_event_to_marker_color(simple_event)
+
+        # If any of the functions return ``None`` `mutwo` will ignore`
+        # the current event.
+        if marker_name is None or marker_color is None:
             return tuple([])
 
         return (

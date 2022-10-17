@@ -1,3 +1,5 @@
+from . import configurations
+
 from .reaper import *
 
 __all__ = reaper.__all__
