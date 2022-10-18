@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2022-10-18
+
+### Changed
+- `reaper_converters.ReaperMarkerConverter` to `reaper_converters.EventToReaperMarkerString`
+
+### Added
+- `reaper_converters.SimpleEventToMarkerName`
+- `reaper_converters.SimpleEventToMarkerColor`
+
+
 ## [0.3.0] - 2022-08-12
 
 ### Changed
