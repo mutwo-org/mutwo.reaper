@@ -7,7 +7,7 @@ from mutwo import core_parameters
 from mutwo import reaper_converters
 
 __all__ = (
-    "EventToReaperMakerString",
+    "EventToReaperMarkerString",
     "SimpleEventToMarkerName",
     "SimpleEventToMarkerColor",
 )
@@ -55,7 +55,7 @@ class SimpleEventToMarkerColor(core_converters.SimpleEventToAttribute):
         super().__init__(attribute_name, exception_value)
 
 
-class EventToReaperMakerString(core_converters.abc.EventConverter):
+class EventToReaperMarkerString(core_converters.abc.EventConverter):
     """Make Reaper Marker entries.
 
     :param simple_event_to_marker_name: A function which converts a
