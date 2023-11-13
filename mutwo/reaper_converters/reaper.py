@@ -84,8 +84,9 @@ class EventToReaperMarkerString(core_converters.abc.EventConverter):
     >>> events[0].color = r'0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}'
     >>> events[1].name = 'center'
     >>> events[1].color = r'0 18849803 1 B {E4DD7D23-98F4-CA97-8587-F4259A9498F7}'
-    >>> marker_converter.convert(events)
-    'MARKER 0 0 beginning 0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}\nMARKER 1 2 center 0 18849803 1 B {E4DD7D23-98F4-CA97-8587-F4259A9498F7}'
+    >>> print(marker_converter.convert(events))
+    MARKER 0 0.0 beginning 0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}
+    MARKER 1 2.0 center 0 18849803 1 B {E4DD7D23-98F4-CA97-8587-F4259A9498F7}
     """
 
     def __init__(
