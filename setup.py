@@ -10,7 +10,7 @@ VERSION = version["VERSION"]
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-extras_require = {"testing": ["nose", "coveralls"]}
+extras_require = {"testing": ["pytest>=7.1.1"]}
 
 setuptools.setup(
     name="mutwo.reaper",
@@ -30,7 +30,7 @@ setuptools.setup(
     ],
     setup_requires=[],
     install_requires=[
-        "mutwo.core>=0.61.4, <1.0.0",
+        "mutwo.core>=0.61.4, <2.0.0",
     ],
     extras_require=extras_require,
     python_requires=">=3.9, <4",
