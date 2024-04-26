@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2024-04-26
+
+This release updates the mutwo.core dependency to a new major version.
+
+
 ## [0.4.0] - 2022-10-18
 
 ### Changed
