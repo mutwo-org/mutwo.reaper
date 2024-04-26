@@ -6,39 +6,39 @@ from mutwo import reaper_converters
 
 
 class EventToReaperMarkerStringTest(unittest.TestCase):
-    def test_convert_simple_event(self):
+    def test_convert_chronon(self):
         converter = reaper_converters.EventToReaperMarkerString()
 
-        event = core_events.SimpleEvent(2)
+        event = core_events.Chronon(2)
         event.name = "testMarker"
         event.color = r"0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}"
 
         absolute_entry_delay = core_parameters.DirectDuration(10)
 
         self.assertEqual(
-            converter._convert_simple_event(event, absolute_entry_delay),
+            converter._convert_chronon(event, absolute_entry_delay),
             (f"10.0 {event.name} {event.color}",),
         )
 
         # with different init arguments
         converter = reaper_converters.EventToReaperMarkerString(
-            simple_event_to_marker_name=lambda simple_event: simple_event.marker_name,
-            simple_event_to_marker_color=lambda simple_event: simple_event.marker_color,
+            chronon_to_marker_name=lambda chronon: chronon.marker_name,
+            chronon_to_marker_color=lambda chronon: chronon.marker_color,
         )
 
         event.marker_name = event.name
         event.marker_color = event.color
 
         self.assertEqual(
-            converter._convert_simple_event(event, absolute_entry_delay),
+            converter._convert_chronon(event, absolute_entry_delay),
             (f"10.0 {event.name} {event.color}",),
         )
 
     def test_convert(self):
         converter = reaper_converters.EventToReaperMarkerString()
 
-        events = core_events.SequentialEvent(
-            [core_events.SimpleEvent(2), core_events.SimpleEvent(3)]
+        events = core_events.Consecution(
+            [core_events.Chronon(2), core_events.Chronon(3)]
         )
 
         events[0].name = "beginning"

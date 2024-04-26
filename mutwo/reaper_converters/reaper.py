@@ -8,13 +8,13 @@ from mutwo import reaper_converters
 
 __all__ = (
     "EventToReaperMarkerString",
-    "SimpleEventToMarkerName",
-    "SimpleEventToMarkerColor",
+    "ChrononToMarkerName",
+    "ChrononToMarkerColor",
 )
 
 
-class SimpleEventToMarkerName(core_converters.SimpleEventToAttribute):
-    """Convert :class:`~mutwo.core_events.SimpleEvent` to a name of a marker.
+class ChrononToMarkerName(core_converters.ChrononToAttribute):
+    """Convert :class:`~mutwo.core_events.Chronon` to a name of a marker.
 
     By default `mutwo` will fetch from an event the
     :const:`~mutwo.reaper_converters.configurations.DEFAULT_MARKER_NAME_ATTRIBUTE_NAME`.
@@ -34,8 +34,8 @@ class SimpleEventToMarkerName(core_converters.SimpleEventToAttribute):
         super().__init__(attribute_name, exception_value)
 
 
-class SimpleEventToMarkerColor(core_converters.SimpleEventToAttribute):
-    """Convert :class:`~mutwo.core_events.SimpleEvent` to the color of a marker.
+class ChrononToMarkerColor(core_converters.ChrononToAttribute):
+    """Convert :class:`~mutwo.core_events.Chronon` to the color of a marker.
 
     By default `mutwo` will fetch from an event the
     :const:`~mutwo.reaper_converters.configurations.DEFAULT_MARKER_COLOR_ATTRIBUTE_NAME`.
@@ -58,18 +58,18 @@ class SimpleEventToMarkerColor(core_converters.SimpleEventToAttribute):
 class EventToReaperMarkerString(core_converters.abc.EventConverter):
     """Make Reaper Marker entries.
 
-    :param simple_event_to_marker_name: A function which converts a
-        :class:`~mutwo.core_events.SimpleEvent` to the marker
+    :param chronon_to_marker_name: A function which converts a
+        :class:`~mutwo.core_events.Chronon` to the marker
         name. If the function returns ``None`` `mutwo` will ignore`
-        the current event. By default `simple_event_to_marker_name` is set
-        to :class:`SimpleEventToMarkerName`.
-    :type simple_event_to_marker_name: typing.Callable[[core_events.SimpleEvent], str]
-    :param simple_event_to_marker_color: A function which converts a
-        :class:`~mutwo.core_events.SimpleEvent` to the marker
+        the current event. By default `chronon_to_marker_name` is set
+        to :class:`ChrononToMarkerName`.
+    :type chronon_to_marker_name: typing.Callable[[core_events.Chronon], str]
+    :param chronon_to_marker_color: A function which converts a
+        :class:`~mutwo.core_events.Chronon` to the marker
         color. If the function returns ``None`` `mutwo` will ignore`
-        the current event. By default `simple_event_to_marker_name` is set
-        to :class:`SimpleEventToMarkerColor`.
-    :type simple_event_to_marker_color: typing.Callable[[core_events.SimpleEvent], str]
+        the current event. By default `chronon_to_marker_name` is set
+        to :class:`ChrononToMarkerColor`.
+    :type chronon_to_marker_color: typing.Callable[[core_events.Chronon], str]
 
     The resulting string can be copied into the respective reaper
     project file one line before the '<PROJBAY' tag.
@@ -79,7 +79,7 @@ class EventToReaperMarkerString(core_converters.abc.EventConverter):
     >>> from mutwo import reaper_converters
     >>> from mutwo import core_events
     >>> marker_converter = reaper_converters.EventToReaperMarkerString()
-    >>> events = core_events.SequentialEvent([core_events.SimpleEvent(2), core_events.SimpleEvent(3)])
+    >>> events = core_events.Consecution([core_events.Chronon(2), core_events.Chronon(3)])
     >>> events[0].name = 'beginning'
     >>> events[0].color = r'0 16797088 1 B {A4376701-5AA5-246B-900B-28ABC969123A}'
     >>> events[1].name = 'center'
@@ -91,23 +91,23 @@ class EventToReaperMarkerString(core_converters.abc.EventConverter):
 
     def __init__(
         self,
-        simple_event_to_marker_name: typing.Callable[
-            [core_events.SimpleEvent], str
-        ] = SimpleEventToMarkerName(),  # type: ignore
-        simple_event_to_marker_color: typing.Callable[
-            [core_events.SimpleEvent], str
-        ] = SimpleEventToMarkerColor(),  # type: ignore
+        chronon_to_marker_name: typing.Callable[
+            [core_events.Chronon], str
+        ] = ChrononToMarkerName(),  # type: ignore
+        chronon_to_marker_color: typing.Callable[
+            [core_events.Chronon], str
+        ] = ChrononToMarkerColor(),  # type: ignore
     ):
-        self._simple_event_to_marker_name = simple_event_to_marker_name
-        self._simple_event_to_marker_color = simple_event_to_marker_color
+        self._chronon_to_marker_name = chronon_to_marker_name
+        self._chronon_to_marker_color = chronon_to_marker_color
 
-    def _convert_simple_event(
+    def _convert_chronon(
         self,
-        simple_event: core_events.SimpleEvent,
+        chronon: core_events.Chronon,
         absolute_entry_delay: core_parameters.abc.Duration,
     ) -> tuple[str, ...]:
-        marker_name = self._simple_event_to_marker_name(simple_event)
-        marker_color = self._simple_event_to_marker_color(simple_event)
+        marker_name = self._chronon_to_marker_name(chronon)
+        marker_color = self._chronon_to_marker_color(chronon)
 
         # If any of the functions return ``None`` `mutwo` will ignore`
         # the current event.
@@ -116,7 +116,7 @@ class EventToReaperMarkerString(core_converters.abc.EventConverter):
 
         return (
             "{} {} {}".format(
-                absolute_entry_delay.duration_in_floats, marker_name, marker_color
+                absolute_entry_delay.beat_count, marker_name, marker_color
             ),
         )
 
